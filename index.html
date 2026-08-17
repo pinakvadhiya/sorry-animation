@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I'm Sorry ❤️</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ffd6e7, #e8d9ff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: #4a2940;
+        }
+
+        .container {
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        /* Envelope */
+
+        .envelope {
+            width: 180px;
+            height: 120px;
+            background: #ff6f91;
+            margin: auto;
+            position: relative;
+            cursor: pointer;
+            border-radius: 10px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            transition: 0.5s;
+        }
+
+        .envelope:hover {
+            transform: scale(1.05);
+        }
+
+        .flap {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 90px solid transparent;
+            border-right: 90px solid transparent;
+            border-top: 65px solid #ff9ab3;
+            top: 0;
+            left: 0;
+            transform-origin: top;
+            transition: 1s;
+        }
+
+        .heart {
+            position: absolute;
+            top: 43px;
+            left: 72px;
+            font-size: 35px;
+            z-index: 2;
+        }
+
+        .open .flap {
+            transform: rotateX(180deg);
+        }
+
+        .click-text {
+            margin-top: 25px;
+            font-size: 18px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Main message */
+
+        .message {
+            display: none;
+            animation: appear 1.5s ease;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .sorry {
+            font-size: 60px;
+            font-weight: bold;
+            color: #e63970;
+            margin-bottom: 20px;
+            text-shadow: 0 5px 15px rgba(230,57,112,0.25);
+        }
+
+        .text {
+            font-size: 20px;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .typing {
+            min-height: 100px;
+        }
+
+        .next-btn,
+        .yes-btn,
+        .no-btn {
+            border: none;
+            padding: 13px 28px;
+            border-radius: 30px;
+            font-size: 17px;
+            cursor: pointer;
+            margin: 8px;
+            transition: 0.3s;
+        }
+
+        .next-btn,
+        .yes-btn {
+            background: #e63970;
+            color: white;
+        }
+
+        .no-btn {
+            background: white;
+            color: #e63970;
+            border: 2px solid #e63970;
+        }
+
+        button:hover {
+            transform: scale(1.08);
+        }
+
+        /* Question */
+
+        .question {
+            display: none;
+            animation: appear 1s ease;
+        }
+
+        .question h1 {
+            font-size: 35px;
+            margin-bottom: 30px;
+        }
+
+        /* Final */
+
+        .final {
+            display: none;
+            animation: appear 1.5s ease;
+        }
+
+        .final h1 {
+            font-size: 45px;
+            color: #e63970;
+            margin-bottom: 20px;
+        }
+
+        .big-heart {
+            font-size: 90px;
+            animation: heartbeat 1s infinite;
+        }
+
+        @keyframes heartbeat {
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        /* Floating hearts */
+
+        .floating-heart {
+            position: fixed;
+            bottom: -30px;
+            font-size: 22px;
+            animation: floatUp 5s linear forwards;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            from {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateY(-110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Confetti */
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            top: -20px;
+            animation: fall 4s linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(720deg);
+            }
+        }
+
+        @media(max-width: 600px) {
+
+            .sorry {
+                font-size: 45px;
+            }
+
+            .text {
+                font-size: 17px;
+            }
+
+            .question h1 {
+                font-size: 27px;
+            }
+
+            .final h1 {
+                font-size: 35px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Envelope -->
+    <div id="opening">
+
+        <div class="envelope" id="envelope" onclick="openLetter()">
+            <div class="flap"></div>
+            <div class="heart">❤️</div>
+        </div>
+
+        <p class="click-text">
+            Tap the letter 💌
+        </p>
+
+    </div>
+
+
+    <!-- Message -->
+    <div class="message" id="message">
+
+        <div class="sorry">
+            I'm Sorry...
+        </div>
+
+        <div class="text typing" id="typing"></div>
+
+        <button class="next-btn" onclick="showQuestion()">
+            One more thing... ❤️
+        </button>
+
+    </div>
+
+
+    <!-- Question -->
+    <div class="question" id="question">
+
+        <h1>
+            Will you forgive me? 🥺
+        </h1>
+
+        <button class="yes-btn" onclick="forgiven()">
+            Yes ❤️
+        </button>
+
+        <button class="no-btn" id="noBtn" onclick="noClicked()">
+            No 😤
+        </button>
+
+    </div>
+
+
+    <!-- Final -->
+    <div class="final" id="final">
+
+        <div class="big-heart">
+            ❤️
+        </div>
+
+        <h1>
+            Thank You! 🥹
+        </h1>
+
+        <p class="text">
+            I promise I'll try to do better.
+            <br>
+            You mean a lot to me ❤️
+        </p>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    const sorryMessage =
+        "I know I made a mistake... 😔<br><br>" +
+        "I never wanted to hurt you.<br>" +
+        "Sometimes we make mistakes without realizing how much they can affect someone.<br><br>" +
+        "So from the bottom of my heart...<br><br>" +
+        "<b>I'm really, really sorry. ❤️</b>";
+
+
+
+    function openLetter() {
+
+        const envelope = document.getElementById("envelope");
+
+        envelope.classList.add("open");
+
+        setTimeout(() => {
+
+            document.getElementById("opening").style.display = "none";
+
+            document.getElementById("message").style.display = "block";
+
+            typeMessage();
+
+        }, 1200);
+    }
+
+
+
+    function typeMessage() {
+
+        const element = document.getElementById("typing");
+
+        let i = 0;
+
+        function type() {
+
+            if (i < sorryMessage.length) {
+
+                element.innerHTML = sorryMessage.substring(0, i + 1);
+
+                i++;
+
+                setTimeout(type, 20);
+
+            }
+
+        }
+
+        type();
+    }
+
+
+
+    function showQuestion() {
+
+        document.getElementById("message").style.display = "none";
+
+        document.getElementById("question").style.display = "block";
+
+    }
+
+
+
+    function forgiven() {
+
+        document.getElementById("question").style.display = "none";
+
+        document.getElementById("final").style.display = "block";
+
+        createConfetti();
+
+    }
+
+
+
+    function noClicked() {
+
+        const button = document.getElementById("noBtn");
+
+        const x = Math.random() * 200 - 100;
+        const y = Math.random() * 150 - 75;
+
+        button.style.transform =
+            `translate(${x}px, ${y}px)`;
+
+    }
+
+
+
+    /* Floating hearts */
+
+    setInterval(() => {
+
+        const heart = document.createElement("div");
+
+        heart.className = "floating-heart";
+
+        heart.innerHTML =
+            ["❤️", "💗", "💕", "💖", "💓"]
+            [Math.floor(Math.random() * 5)];
+
+        heart.style.left =
+            Math.random() * 100 + "vw";
+
+        heart.style.fontSize =
+            (15 + Math.random() * 25) + "px";
+
+        document.body.appendChild(heart);
+
+        setTimeout(() => {
+            heart.remove();
+        }, 5000);
+
+    }, 700);
+
+
+
+    /* Confetti */
+
+    function createConfetti() {
+
+        for (let i = 0; i < 100; i++) {
+
+            const confetti =
+                document.createElement("div");
+
+            confetti.className = "confetti";
+
+            confetti.style.left =
+                Math.random() * 100 + "vw";
+
+            confetti.style.background =
+                `hsl(${Math.random() * 360}, 80%, 60%)`;
+
+            confetti.style.animationDelay =
+                Math.random() * 2 + "s";
+
+            document.body.appendChild(confetti);
+
+            setTimeout(() => {
+                confetti.remove();
+            }, 5000);
+
+        }
+
+    }
+
+</script>
+
+</body>
+</html>
